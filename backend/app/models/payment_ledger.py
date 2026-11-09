@@ -27,6 +27,8 @@ class PaymentLedger(Base):
 
     transaction_type = Column(String(30), nullable=False)
 
+    payment_mode = Column(String(30), nullable=False, default="MOCK")
+
     amount = Column(Numeric(10, 2), nullable=False)
 
     payment_status = Column(String(30), nullable=False)
