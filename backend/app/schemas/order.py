@@ -18,6 +18,10 @@ class OrderCreate(BaseModel):
     special_instructions: str | None = None
     items: list[OrderItemCreate] = Field(min_length=1)
 
+# Data received when assigning a delivery partner
+class DeliveryAssignment(BaseModel):
+    delivery_partner_id: int = Field(gt=0)
+
 
 # Data received when updating order status
 class OrderStatusUpdate(BaseModel):
@@ -30,7 +34,6 @@ class OrderStatusUpdate(BaseModel):
         "DELIVERED",
         "CANCELLED",
     ]
-
 
 # Individual item returned in an order response
 class OrderItemResponse(BaseModel):

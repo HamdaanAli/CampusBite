@@ -1,14 +1,23 @@
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-
 from app.database import get_db
 from app.models.user import User
-from app.schemas.order import OrderCreate, OrderResponse
+from app.schemas.order import (
+    OrderCreate,
+    OrderResponse,
+    OrderStatusUpdate,
+    DeliveryAssignment
+)
 from app.services.order_service import (
     create_order,
     get_owner_orders,
-    get_customer_orders
+    get_customer_orders,
+    get_delivery_partner_orders,
+    update_delivery_order_status,
+    cancel_customer_order,
+    update_owner_order_status,
+    assign_delivery_partner
 )
 from app.core.dependencies import require_roles
 
@@ -17,7 +26,6 @@ router = APIRouter(
     prefix="/orders",
     tags=["Orders"]
 )
-
 
 @router.post(
     "/restaurants/{restaurant_id}",
@@ -86,3 +94,145 @@ def list_my_orders(
         db=db,
         customer_id=current_user.id
     )
+
+@router.get(
+    "/delivery",
+    response_model=list[OrderResponse]
+)
+def list_delivery_partner_orders(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_roles("DELIVERY_PARTNER"))
+):
+    return get_delivery_partner_orders(
+        db=db,
+        delivery_partner_id=current_user.id
+    )
+
+
+
+@router.patch(
+    "/{order_id}/cancel",
+    response_model=OrderResponse
+)
+def cancel_order(
+    order_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_roles("CUSTOMER"))
+):
+    try:
+        cancelled_order = cancel_customer_order(
+            db=db,
+            order_id=order_id,
+            customer_id=current_user.id
+        )
+
+        if cancelled_order is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Order not found"
+            )
+
+        return cancelled_order
+
+    except ValueError as error:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(error)
+        )
+
+
+@router.patch(
+    "/{order_id}/status",
+    response_model=OrderResponse
+)
+def update_order_status(
+    order_id: int,
+    order_data: OrderStatusUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_roles("RESTAURANT_OWNER"))
+):
+    try:
+        updated_order = update_owner_order_status(
+            db=db,
+            order_id=order_id,
+            owner_id=current_user.id,
+            new_status=order_data.status
+        )
+
+        if updated_order is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Order not found"
+            )
+
+        return updated_order
+
+    except ValueError as error:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(error)
+        )
+
+@router.patch(
+    "/{order_id}/assign-delivery",
+    response_model=OrderResponse
+)
+def assign_order_delivery_partner(
+    order_id: int,
+    assignment_data: DeliveryAssignment,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_roles("RESTAURANT_OWNER"))
+):
+    try:
+        assigned_order = assign_delivery_partner(
+            db=db,
+            order_id=order_id,
+            owner_id=current_user.id,
+            delivery_partner_id=assignment_data.delivery_partner_id
+        )
+
+        if assigned_order is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Order not found"
+            )
+
+        return assigned_order
+
+    except ValueError as error:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(error)
+        ) 
+
+@router.patch(
+    "/{order_id}/delivery-status",
+    response_model=OrderResponse
+)
+def update_delivery_status(
+    order_id: int,
+    order_data: OrderStatusUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_roles("DELIVERY_PARTNER"))
+):
+    try:
+        updated_order = update_delivery_order_status(
+            db=db,
+            order_id=order_id,
+            delivery_partner_id=current_user.id,
+            new_status=order_data.status
+        )
+
+        if updated_order is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Order not found or not assigned to you"
+            )
+
+        return updated_order
+
+    except ValueError as error:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(error)
+        )

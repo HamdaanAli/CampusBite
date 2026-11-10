@@ -8,6 +8,7 @@ from app.models.order import Order
 from app.models.order_item import OrderItem
 from app.models.menu_item import MenuItem
 from app.models.restaurant import Restaurant
+from app.models.user import User
 from app.models.payment_ledger import PaymentLedger
 from app.schemas.order import OrderCreate
 
@@ -31,6 +32,185 @@ def get_customer_orders(db: Session, customer_id: int):
     ).all()
 
     return orders
+
+def get_delivery_partner_orders(db: Session, delivery_partner_id: int):
+    orders = db.query(Order).filter(
+        Order.delivery_partner_id == delivery_partner_id
+    ).order_by(
+        Order.created_at.desc()
+    ).all()
+
+    return orders
+
+def update_delivery_order_status(
+    db: Session,
+    order_id: int,
+    delivery_partner_id: int,
+    new_status: str
+):
+    order = db.query(Order).filter(
+        Order.id == order_id,
+        Order.delivery_partner_id == delivery_partner_id
+    ).first()
+
+    if order is None:
+        return None
+
+    allowed_transitions = {
+        "ASSIGNED": "OUT_FOR_DELIVERY",
+        "OUT_FOR_DELIVERY": "DELIVERED"
+    }
+
+    expected_status = allowed_transitions.get(order.status)
+
+    if expected_status != new_status:
+        raise ValueError(
+            f"Invalid status transition. Current status: {order.status}"
+        )
+
+    try:
+        order.status = new_status
+
+        db.commit()
+        db.refresh(order)
+
+        return order
+
+    except Exception:
+        db.rollback()
+        raise
+
+def cancel_customer_order(
+    db: Session,
+    order_id: int,
+    customer_id: int
+):
+    order = db.query(Order).filter(
+        Order.id == order_id,
+        Order.customer_id == customer_id
+    ).first()
+
+    if order is None:
+        return None
+
+    if order.status != "PLACED":
+        raise ValueError(
+            "Only orders with PLACED status can be cancelled"
+        )
+
+    try:
+        order.status = "CANCELLED"
+        order.payment_status = "refunded"
+
+        refund = PaymentLedger(
+            order_id=order.id,
+            transaction_type="REFUND",
+            payment_mode="MOCK",
+            amount=order.total_amount,
+            payment_status="refunded",
+            transaction_reference=f"REFUND-{uuid.uuid4().hex[:12].upper()}",
+            description="Dummy payment refund for cancelled order"
+        )
+
+        db.add(refund)
+        db.commit()
+        db.refresh(order)
+
+        return order
+
+    except Exception:
+        db.rollback()
+        raise
+
+def update_owner_order_status(
+    db: Session,
+    order_id: int,
+    owner_id: int,
+    new_status: str
+):
+    order = db.query(Order).join(
+        Restaurant,
+        Order.restaurant_id == Restaurant.id
+    ).filter(
+        Order.id == order_id,
+        Restaurant.owner_id == owner_id
+    ).first()
+
+    if order is None:
+        return None
+
+    allowed_transitions = {
+        "PLACED": "ACCEPTED",
+        "ACCEPTED": "PREPARING",
+        "PREPARING": "READY"
+    }
+
+    expected_status = allowed_transitions.get(order.status)
+
+    if expected_status != new_status:
+        raise ValueError(
+            f"Invalid status transition. Current status: {order.status}"
+        )
+
+    try:
+        order.status = new_status
+
+        db.commit()
+        db.refresh(order)
+
+        return order
+
+    except Exception:
+        db.rollback()
+        raise
+
+
+def assign_delivery_partner(
+    db: Session,
+    order_id: int,
+    owner_id: int,
+    delivery_partner_id: int
+):
+    order = db.query(Order).join(
+        Restaurant,
+        Order.restaurant_id == Restaurant.id
+    ).filter(
+        Order.id == order_id,
+        Restaurant.owner_id == owner_id
+    ).first()
+
+    if order is None:
+        return None
+
+    if order.status != "READY":
+        raise ValueError(
+            "Delivery partner can only be assigned to READY orders"
+        )
+
+    delivery_partner = db.query(User).filter(
+        User.id == delivery_partner_id,
+        User.role == "DELIVERY_PARTNER",
+        User.is_active == True
+    ).first()
+
+    if delivery_partner is None:
+        raise ValueError(
+            "Invalid or inactive delivery partner"
+        )
+
+    try:
+        order.delivery_partner_id = delivery_partner.id
+        order.status = "ASSIGNED"
+
+        db.commit()
+        db.refresh(order)
+
+        return order
+
+    except Exception:
+        db.rollback()
+        raise
+
 
 def create_order(
     db: Session,
