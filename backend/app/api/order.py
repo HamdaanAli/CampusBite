@@ -1,5 +1,6 @@
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from datetime import date, datetime, time, timedelta, timezone
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.user import User
@@ -73,12 +74,41 @@ def place_new_order(
     response_model=list[OrderResponse]
 )
 def list_owner_orders(
+    order_status: str | None = Query(default=None, alias="status"),
+    start_date: date | None = Query(default=None),
+    end_date: date | None = Query(default=None),
+    page: int = Query(default=1, ge=1),
+    limit: int = Query(default=10, ge=1, le=100),
     db: Session = Depends(get_db),
     current_user: User = Depends(require_roles("RESTAURANT_OWNER"))
 ):
+    if start_date and end_date and end_date < start_date:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="end_date must be on or after start_date"
+        )
+
+    start_datetime = (
+        datetime.combine(start_date, time.min, tzinfo=timezone.utc)
+        if start_date else None
+    )
+
+    end_datetime = (
+        datetime.combine(
+            end_date + timedelta(days=1),
+            time.min,
+            tzinfo=timezone.utc
+        )
+        if end_date else None
+    )
     return get_owner_orders(
         db=db,
-        owner_id=current_user.id
+        owner_id=current_user.id,
+        order_status=order_status,
+        start_date=start_datetime,
+        end_date=end_datetime,
+        page=page,
+        limit=limit
     )
 
 #customer orders history
