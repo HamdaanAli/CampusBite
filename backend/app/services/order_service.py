@@ -12,15 +12,37 @@ from app.models.user import User
 from app.models.payment_ledger import PaymentLedger
 from app.schemas.order import OrderCreate
 
-def get_owner_orders(db: Session, owner_id: int):
-    orders = db.query(Order).join(
+
+def get_owner_orders(
+    db: Session,
+    owner_id: int,
+    order_status: str | None = None,
+    start_date=None,
+    end_date=None,
+    page: int = 1,
+    limit: int = 10
+):
+    query = db.query(Order).join(
         Restaurant,
         Order.restaurant_id == Restaurant.id
     ).filter(
         Restaurant.owner_id == owner_id
-    ).order_by(
+    )
+
+    if order_status:
+        query = query.filter(Order.status == order_status)
+
+    if start_date:
+        query = query.filter(Order.created_at >= start_date)
+
+    if end_date:
+        query = query.filter(Order.created_at < end_date)
+
+    orders = query.order_by(
         Order.created_at.desc()
-    ).all()
+    ).offset(
+        (page - 1) * limit
+    ).limit(limit).all()
 
     return orders
 
