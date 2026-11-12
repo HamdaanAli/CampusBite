@@ -71,6 +71,6 @@ def generate_mock_summary(prepared_orders):
 
     return (
         f"You have placed {total_orders} orders. "
-        f"Your total spending is ₹{total_spent:.2f}. "
+        f"Your total spending is Rs.{total_spent:.2f}. "
         f"Your most ordered item is {favorite_item}."
     )

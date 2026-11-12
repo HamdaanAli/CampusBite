@@ -17,6 +17,7 @@ from app.api.order import router as order_router
 from app.api.review import router as review_router
 from app.api.return_request import router as return_request_router
 from app.api.statistics import router as statistics_router
+from app.api.ai_insights import router as ai_insights_router
 
 # Configure logging
 logging.basicConfig(
@@ -62,6 +63,9 @@ app.include_router(return_request_router, prefix="/api/v1")
 
 #statistics router register
 app.include_router(statistics_router, prefix="/api/v1")
+
+# AI insights router register
+app.include_router(ai_insights_router, prefix="/api/v1")
 
 # Request logging middleware
 @app.middleware("http")
