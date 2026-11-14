@@ -1,5 +1,8 @@
 import logging
 import time
+from contextlib import asynccontextmanager
+from apscheduler.schedulers.background import BackgroundScheduler
+from app.services.reminder_service import generate_order_reminders
 from app.api.auth import router as auth_router
 from fastapi import FastAPI, Depends, Request
 from fastapi.exceptions import RequestValidationError
@@ -18,6 +21,7 @@ from app.api.review import router as review_router
 from app.api.return_request import router as return_request_router
 from app.api.statistics import router as statistics_router
 from app.api.ai_insights import router as ai_insights_router
+from app.api.reminder import router as reminder_router
 
 # Configure logging
 logging.basicConfig(
@@ -27,13 +31,36 @@ logging.basicConfig(
 
 logger = logging.getLogger("campusbite")
 
+scheduler = BackgroundScheduler()
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    scheduler.add_job(
+        generate_order_reminders,
+        trigger="interval",
+        minutes=1,
+        id="order_reminders",
+        replace_existing=True
+    )
+
+    scheduler.start()
+    logger.info("Order reminder scheduler started")
+
+    try:
+        yield
+    finally:
+        scheduler.shutdown()
+        logger.info("Order reminder scheduler stopped")
 
 app = FastAPI(
     title=settings.APP_NAME,
     description="Restaurant Ordering and Delivery Platform",
     version=settings.APP_VERSION,
-    debug=settings.DEBUG
+    debug=settings.DEBUG,
+    lifespan=lifespan
 )
+
 #authenticate router register
 app.include_router(
     auth_router,
@@ -49,6 +76,12 @@ app.include_router(
 #menu item router register
 app.include_router(
     menu_item_router,
+    prefix="/api/v1"
+)
+
+# Reminder router register
+app.include_router(
+    reminder_router,
     prefix="/api/v1"
 )
 

@@ -24,6 +24,8 @@ class Settings(BaseSettings):
 
         # OpenAI settings
     OPENAI_API_KEY: str | None = None
+    GEMINI_API_KEY: str | None = None
+    GROQ_API_KEY: str | None = None
 
     model_config = SettingsConfigDict(
         env_file=ROOT_DIR / ".env",

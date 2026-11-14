@@ -1,7 +1,9 @@
 
 from datetime import date, datetime, time, timedelta, timezone
+
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
+
 from app.database import get_db
 from app.models.user import User
 from app.schemas.order import (
@@ -27,6 +29,7 @@ router = APIRouter(
     prefix="/orders",
     tags=["Orders"]
 )
+
 
 @router.post(
     "/restaurants/{restaurant_id}",
@@ -69,6 +72,7 @@ def place_new_order(
             detail="Could not place order"
         )
 
+
 @router.get(
     "/owner",
     response_model=list[OrderResponse]
@@ -101,6 +105,7 @@ def list_owner_orders(
         )
         if end_date else None
     )
+
     return get_owner_orders(
         db=db,
         owner_id=current_user.id,
@@ -111,7 +116,8 @@ def list_owner_orders(
         limit=limit
     )
 
-#customer orders history
+
+# Customer orders history
 @router.get(
     "/my",
     response_model=list[OrderResponse]
@@ -125,6 +131,7 @@ def list_my_orders(
         customer_id=current_user.id
     )
 
+
 @router.get(
     "/delivery",
     response_model=list[OrderResponse]
@@ -137,7 +144,6 @@ def list_delivery_partner_orders(
         db=db,
         delivery_partner_id=current_user.id
     )
-
 
 
 @router.patch(
@@ -203,6 +209,7 @@ def update_order_status(
             detail=str(error)
         )
 
+
 @router.patch(
     "/{order_id}/assign-delivery",
     response_model=OrderResponse
@@ -233,7 +240,8 @@ def assign_order_delivery_partner(
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=str(error)
-        ) 
+        )
+
 
 @router.patch(
     "/{order_id}/delivery-status",

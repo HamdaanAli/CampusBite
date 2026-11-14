@@ -1,18 +1,20 @@
 
-from sqlalchemy.orm import Session
+import json
 
+from groq import Groq
+
+from app.config import settings
 from app.services.order_service import get_customer_orders
 
 
 def get_customer_order_history(
-    db: Session,
+    db,
     customer_id: int
 ):
     return get_customer_orders(
         db=db,
         customer_id=customer_id
     )
-
 
 
 def prepare_order_data(orders):
@@ -39,38 +41,54 @@ def prepare_order_data(orders):
     return prepared_orders
 
 
-def generate_mock_summary(prepared_orders):
-    if not prepared_orders:
-        return (
-            "You have not placed any orders yet. "
-            "Start exploring restaurants on CampusBite!"
+def generate_ai_answer(question, prepared_orders):
+    if not settings.GROQ_API_KEY:
+        raise ValueError("Groq API key is not configured")
+
+    client = Groq(
+        api_key=settings.GROQ_API_KEY,
+        max_retries=0,
+        timeout=30.0
+    )
+
+    try:
+        response = client.chat.completions.create(
+            model="openai/gpt-oss-20b",
+            messages=[
+                {
+                    "role": "system",
+                    "content": (
+                       "You are CampusBite's order insights assistant. "
+                        "Answer customer questions using only the supplied "
+                        "order history. Do not invent orders, amounts, dates, "
+                        "or statuses. If information is unavailable, say so "
+                        "clearly. Keep answers concise and easy to understand. "
+                        "All monetary amounts are in Indian Rupees (INR). "
+                        "Always use the ₹ symbol for money. Never use the $ symbol "
+                        "or convert amounts into another currency."
+                    )
+                },
+                {
+                    "role": "user",
+                    "content": (
+                        f"Customer question: {question}\n\n"
+                        "Customer order history:\n"
+                        f"{json.dumps(prepared_orders, ensure_ascii=False)}"
+                    )
+                }
+            ],
+            temperature=0.3,
+            max_completion_tokens=800
         )
 
-    total_orders = len(prepared_orders)
+        answer = (
+            response.choices[0].message.content or ""
+        ).strip()
 
-    total_spent = sum(
-        order["total_amount"]
-        for order in prepared_orders
-    )
+        if not answer:
+            raise RuntimeError("Groq returned an empty response")
 
-    item_quantities = {}
+        return answer
 
-    for order in prepared_orders:
-        for item in order["items"]:
-            item_name = item["name"]
-
-            item_quantities[item_name] = (
-                item_quantities.get(item_name, 0)
-                + item["quantity"]
-            )
-
-    favorite_item = max(
-        item_quantities,
-        key=item_quantities.get
-    )
-
-    return (
-        f"You have placed {total_orders} orders. "
-        f"Your total spending is Rs.{total_spent:.2f}. "
-        f"Your most ordered item is {favorite_item}."
-    )
+    finally:
+        client.close()
