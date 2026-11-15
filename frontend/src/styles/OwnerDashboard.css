@@ -1,0 +1,711 @@
+
+/* ==================== OWNER DASHBOARD BASE ==================== */
+.owner-dashboard {
+  min-height: 100vh;
+  display: flex;
+  background: #f5f7fb;
+  color: #263247;
+  font-family: inherit;
+}
+
+/* ==================== SIDEBAR ==================== */
+.owner-sidebar {
+  width: 260px;
+  min-height: 100vh;
+  padding: 25px 18px;
+  background: #17243a;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  z-index: 20;
+}
+
+.owner-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 5px 8px 28px;
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.owner-brand strong {
+  color: #f5a623;
+}
+
+.owner-brand small {
+  display: block;
+  margin-top: 3px;
+  font-size: 9px;
+  letter-spacing: 1.7px;
+  color: #aab6c8;
+}
+
+.owner-brand-icon {
+  width: 43px;
+  height: 43px;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  color: #17243a;
+  background: #f5a623;
+}
+
+/* ==================== OWNER PROFILE ==================== */
+.owner-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 17px 10px;
+  margin-bottom: 27px;
+  border-top: 1px solid #344158;
+  border-bottom: 1px solid #344158;
+}
+
+.owner-avatar {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #f5a623;
+  color: #17243a;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.owner-profile-details {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.owner-profile-details strong {
+  overflow: hidden;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.owner-profile-details span {
+  font-size: 11px;
+  color: #aab6c8;
+}
+
+/* ==================== SIDEBAR NAVIGATION ==================== */
+.owner-menu-heading {
+  padding: 0 11px 12px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #8290a5;
+}
+
+.owner-navigation {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.owner-nav-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 12px 13px;
+  border: none;
+  border-radius: 9px;
+  background: transparent;
+  color: #c3ccda;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.owner-nav-item:hover {
+  background: #293951;
+  color: #ffffff;
+}
+
+.owner-nav-active {
+  background: #f5a623;
+  color: #17243a;
+}
+
+.owner-nav-active:hover {
+  background: #ffb638;
+  color: #17243a;
+}
+
+/* ==================== SIDEBAR LOGOUT ==================== */
+.owner-logout-button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: auto;
+  padding: 13px;
+  border: none;
+  border-radius: 9px;
+  background: #293951;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.owner-logout-button:hover {
+  background: #3a4a63;
+}
+
+/* ==================== MAIN CONTENT ==================== */
+.owner-main {
+  min-width: 0;
+  flex: 1;
+}
+
+.owner-topbar {
+  min-height: 100px;
+  padding: 22px 35px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  border-bottom: 1px solid #e8ecf2;
+}
+
+.owner-topbar-label {
+  color: #8995a7;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+}
+
+.owner-topbar h1 {
+  margin: 6px 0 0;
+  color: #263247;
+  font-size: 23px;
+}
+
+.owner-topbar-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.owner-avatar-small {
+  width: 36px;
+  height: 36px;
+  font-size: 15px;
+}
+
+/* ==================== DASHBOARD CONTENT ==================== */
+.owner-content {
+  padding: 32px 35px;
+}
+
+.owner-welcome-card {
+  padding: 32px;
+  border-radius: 16px;
+  background: #ffffff;
+  border: 1px solid #e8ecf2;
+  box-shadow: 0 5px 20px rgba(30, 45, 70, 0.04);
+}
+
+.owner-eyebrow {
+  color: #d58b16;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.owner-welcome-card h2 {
+  margin: 12px 0;
+  color: #263247;
+  font-size: 26px;
+}
+
+.owner-welcome-card p {
+  margin: 0;
+  color: #758197;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.owner-placeholder {
+  padding: 35px;
+  border: 1px dashed #cbd3df;
+  border-radius: 13px;
+  background: #ffffff;
+  color: #758197;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* ==================== MOBILE HEADER ==================== */
+.owner-mobile-header {
+  display: none;
+}
+
+.owner-sidebar-overlay {
+  display: none;
+}
+
+.owner-mobile-menu-button {
+  border: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* ==================== RESPONSIVE LAYOUT ==================== */
+@media (max-width: 850px) {
+  .owner-sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: -280px;
+    width: 260px;
+    min-height: 100vh;
+    transition: left 0.25s ease;
+  }
+
+  .owner-sidebar-open {
+    left: 0;
+  }
+
+  .owner-mobile-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    padding: 0 17px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: #17243a;
+    color: #ffffff;
+    font-size: 17px;
+    font-weight: 700;
+    z-index: 15;
+  }
+
+  .owner-mobile-header strong {
+    color: #f5a623;
+  }
+
+  .owner-sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    display: block;
+    width: 100%;
+    border: none;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 18;
+  }
+
+  .owner-main {
+    width: 100%;
+    padding-top: 60px;
+  }
+
+  .owner-topbar {
+    padding: 20px;
+  }
+
+  .owner-content {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 500px) {
+  .owner-topbar-user > span {
+    display: none;
+  }
+
+  .owner-topbar h1 {
+    font-size: 20px;
+  }
+
+  .owner-welcome-card {
+    padding: 23px;
+  }
+
+  .owner-welcome-card h2 {
+    font-size: 22px;
+  }
+}
+
+/* ==================== OWNER RESTAURANT MANAGEMENT ==================== */
+.owner-restaurant-section {
+  width: 100%;
+}
+
+.owner-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.owner-section-heading h2 {
+  margin: 8px 0;
+  color: #263247;
+  font-size: 25px;
+}
+
+.owner-section-heading p {
+  margin: 0;
+  color: #758197;
+  font-size: 13px;
+}
+
+.owner-restaurant-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.owner-restaurant-card {
+  padding: 25px;
+  border: 1px solid #e8ecf2;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 5px 20px rgba(30, 45, 70, 0.04);
+}
+
+.owner-restaurant-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #edf0f5;
+}
+
+.owner-restaurant-icon {
+  width: 45px;
+  height: 45px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  border-radius: 12px;
+  background: #fff3dc;
+  color: #d58b16;
+}
+
+.owner-restaurant-title {
+  min-width: 0;
+  flex: 1;
+}
+
+.owner-restaurant-title h3 {
+  margin: 0 0 5px;
+  color: #263247;
+  font-size: 16px;
+}
+
+.owner-restaurant-title span {
+  color: #8995a7;
+  font-size: 11px;
+}
+
+.owner-status {
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.owner-status-active {
+  background: #e7f8ee;
+  color: #18834b;
+}
+
+.owner-status-inactive {
+  background: #fcebea;
+  color: #bd3939;
+}
+
+.owner-restaurant-details {
+  display: grid;
+  gap: 17px;
+  padding: 22px 0;
+}
+
+.owner-restaurant-details span {
+  color: #8995a7;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.owner-restaurant-details p {
+  margin: 6px 0 0;
+  color: #39465b;
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.owner-restaurant-card-actions {
+  padding-top: 17px;
+  border-top: 1px solid #edf0f5;
+}
+
+.owner-primary-button,
+.owner-secondary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.owner-primary-button {
+  background: #f5a623;
+  color: #17243a;
+}
+
+.owner-primary-button:hover {
+  background: #ffb638;
+}
+
+.owner-secondary-button {
+  background: #edf0f5;
+  color: #39465b;
+}
+
+.owner-secondary-button:hover {
+  background: #e0e5ed;
+}
+
+.owner-primary-button:disabled,
+.owner-secondary-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ==================== RESTAURANT EDIT FORM ==================== */
+.owner-restaurant-form {
+  display: grid;
+  gap: 17px;
+  padding-top: 22px;
+}
+
+.owner-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.owner-form-field label {
+  color: #39465b;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.owner-form-field input,
+.owner-form-field textarea {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid #dce2eb;
+  border-radius: 8px;
+  outline: none;
+  background: #ffffff;
+  color: #263247;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.owner-form-field input:focus,
+.owner-form-field textarea:focus {
+  border-color: #e9a027;
+  box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.12);
+}
+
+.owner-form-field textarea {
+  resize: vertical;
+}
+
+.owner-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-top: 5px;
+}
+
+.owner-alert {
+  margin-bottom: 18px;
+  padding: 13px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.owner-alert-success {
+  background: #e7f8ee;
+  color: #18834b;
+}
+
+.owner-alert-error {
+  background: #fcebea;
+  color: #bd3939;
+}
+
+.owner-restaurant-message {
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 25px;
+  border: 1px solid #e8ecf2;
+  border-radius: 13px;
+  background: #ffffff;
+  color: #758197;
+  text-align: center;
+}
+
+.owner-restaurant-message h3,
+.owner-restaurant-message p {
+  margin: 0;
+}
+
+.owner-restaurant-message h3 {
+  color: #263247;
+  font-size: 16px;
+}
+
+.owner-restaurant-message p {
+  font-size: 13px;
+}
+
+.owner-loading-icon {
+  animation: owner-spin 1s linear infinite;
+}
+
+@keyframes owner-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ==================== RESTAURANT MOBILE LAYOUT ==================== */
+@media (max-width: 550px) {
+  .owner-section-heading {
+    align-items: flex-start;
+  }
+
+  .owner-section-heading h2 {
+    font-size: 21px;
+  }
+
+  .owner-restaurant-card {
+    padding: 18px;
+  }
+
+  .owner-restaurant-card-header {
+    flex-wrap: wrap;
+  }
+
+  .owner-form-actions {
+    justify-content: stretch;
+  }
+
+  .owner-form-actions button {
+    flex: 1;
+  }
+}
+
+
+/* ==================== COMPLETE OWNER WORKSPACE ==================== */
+.owner-workspace-section { display: flex; flex-direction: column; gap: 22px; }
+.owner-section-heading { display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+.owner-section-heading h2 { margin:7px 0 5px; color:#263247; font-size:24px; }
+.owner-section-heading p { margin:0; color:#758197; font-size:13px; }
+.owner-primary-button,.owner-secondary-button { display:inline-flex; align-items:center; justify-content:center; gap:8px; border:0; border-radius:8px; padding:11px 15px; font-size:12px; font-weight:700; cursor:pointer; }
+.owner-primary-button { background:#f5a623; color:#17243a; }
+.owner-primary-button:hover { background:#ffb638; }
+.owner-secondary-button { background:#edf0f5; color:#39465b; }
+.owner-secondary-button:hover { background:#e0e5ed; }
+.owner-primary-button:disabled,.owner-secondary-button:disabled { opacity:.55; cursor:not-allowed; }
+.owner-form-card,.owner-panel { background:#fff; border:1px solid #e8ecf2; border-radius:13px; padding:22px; box-shadow:0 4px 16px rgba(30,45,70,.035); }
+.owner-form-card h3,.owner-panel h3 { margin:0 0 16px; color:#263247; font-size:16px; }
+.owner-form-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:15px; }
+.owner-form-wide { grid-column:1/-1; }
+.owner-form-field { display:flex; flex-direction:column; gap:7px; color:#39465b; font-size:12px; font-weight:700; }
+.owner-form-field input,.owner-form-field textarea,.owner-toolbar select,.owner-filter-bar input,.owner-filter-bar select,.owner-assign-row select { width:100%; padding:10px 11px; border:1px solid #dce2eb; border-radius:8px; outline:none; background:#fff; color:#263247; font:inherit; font-size:13px; }
+.owner-form-field input:focus,.owner-form-field textarea:focus,.owner-toolbar select:focus,.owner-filter-bar input:focus,.owner-filter-bar select:focus { border-color:#e9a027; box-shadow:0 0 0 3px rgba(245,166,35,.12); }
+.owner-form-actions,.owner-card-actions { display:flex; gap:9px; justify-content:flex-end; flex-wrap:wrap; margin-top:16px; }
+.owner-mini-summary,.owner-kpi-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:13px; }
+.owner-mini-summary { grid-template-columns:repeat(3,minmax(0,1fr)); }
+.owner-mini-summary>div,.owner-kpi-card { display:flex; flex-direction:column; gap:7px; padding:18px; background:#fff; border:1px solid #e8ecf2; border-radius:12px; }
+.owner-mini-summary strong,.owner-kpi-card strong { color:#263247; font-size:24px; }
+.owner-mini-summary span,.owner-kpi-card>span:last-child { color:#758197; font-size:12px; }
+.owner-kpi-icon { color:#d58b16; }
+.owner-kpi-card { min-height:112px; }
+.owner-kpi-card strong { font-size:23px; }
+.owner-restaurant-grid,.owner-data-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:15px; }
+.owner-restaurant-card,.owner-data-card,.owner-order-card { padding:20px; background:#fff; border:1px solid #e8ecf2; border-radius:12px; box-shadow:0 4px 14px rgba(30,45,70,.03); }
+.owner-restaurant-card h3,.owner-data-card h3 { margin:13px 0 7px; color:#263247; font-size:17px; }
+.owner-restaurant-card p,.owner-data-card p,.owner-order-card p { color:#758197; font-size:13px; line-height:1.55; }
+.owner-restaurant-card-header,.owner-order-heading { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.owner-restaurant-icon { width:42px; height:42px; display:grid; place-items:center; border-radius:11px; background:#fff4df; color:#bd7b0e; }
+.owner-status-active,.owner-status-inactive,.owner-status-pill { display:inline-flex; padding:5px 9px; border-radius:20px; background:#e7f8ee; color:#18834b; font-size:10px; font-weight:800; }
+.owner-status-inactive { background:#edf0f5; color:#69768a; }
+.owner-status-pill { background:#fff4df; color:#9b6509; }
+.owner-restaurant-meta { display:flex; flex-direction:column; gap:5px; color:#758197; font-size:11px; overflow-wrap:anywhere; }
+.owner-card-actions { justify-content:flex-start; }
+.owner-toolbar,.owner-filter-bar { display:flex; flex-wrap:wrap; gap:13px; align-items:end; }
+.owner-toolbar label,.owner-filter-bar label { display:flex; flex-direction:column; gap:6px; min-width:170px; color:#39465b; font-size:11px; font-weight:700; }
+.owner-filter-bar { padding:15px; background:#fff; border:1px solid #e8ecf2; border-radius:11px; }
+.owner-filter-bar label { flex:1; }
+.owner-table-wrap { width:100%; overflow-x:auto; }
+.owner-table { width:100%; border-collapse:collapse; min-width:650px; font-size:12px; }
+.owner-table th,.owner-table td { padding:13px 12px; border-bottom:1px solid #edf0f5; text-align:left; white-space:nowrap; }
+.owner-table th { color:#758197; font-size:10px; text-transform:uppercase; letter-spacing:.6px; }
+.owner-table td { color:#39465b; }
+.owner-panel-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:15px; }
+.owner-panel-heading h3 { margin:0 0 5px; }
+.owner-panel-heading p { margin:0; color:#758197; font-size:12px; }
+.owner-text-button { border:0; background:none; color:#b8790d; font-size:12px; font-weight:700; cursor:pointer; }
+.owner-muted { color:#758197; font-size:13px; }
+.owner-attention-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+.owner-attention-grid button { display:flex; flex-direction:column; gap:5px; align-items:flex-start; padding:15px; border:1px solid #e8ecf2; border-radius:10px; background:#fbfcfe; cursor:pointer; }
+.owner-attention-grid strong { color:#263247; font-size:22px; }
+.owner-attention-grid span { color:#758197; font-size:11px; }
+.owner-order-list { display:grid; gap:13px; }
+.owner-order-heading>div { display:flex; flex-direction:column; gap:4px; }
+.owner-order-heading span:not(.owner-status-pill) { color:#758197; font-size:11px; }
+.owner-order-meta { display:flex; justify-content:space-between; color:#758197; font-size:11px; }
+.owner-order-meta strong { color:#263247; font-size:14px; }
+.owner-order-address { overflow-wrap:anywhere; }
+.owner-assign-row { display:flex; gap:10px; align-items:center; margin-top:12px; }
+.owner-assign-row select { flex:1; }
+.owner-pagination { display:flex; align-items:center; justify-content:center; gap:14px; color:#758197; font-size:12px; }
+.owner-restaurant-message { min-height:150px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; padding:25px; border:1px solid #e8ecf2; border-radius:13px; background:#fff; color:#758197; text-align:center; }
+.owner-restaurant-message p { margin:0; font-size:13px; }
+.owner-alert { padding:12px 15px; border-radius:8px; font-size:12px; }
+.owner-alert-success { background:#e7f8ee; color:#18834b; }
+.owner-alert-error { background:#fcebea; color:#bd3939; }
+.owner-loading-icon { animation:owner-spin 1s linear infinite; }
+@keyframes owner-spin { to { transform:rotate(360deg); } }
+@media(max-width:1000px) { .owner-kpi-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media(max-width:650px) { .owner-form-grid,.owner-restaurant-grid,.owner-data-grid { grid-template-columns:1fr; } .owner-form-wide { grid-column:auto; } .owner-attention-grid { grid-template-columns:1fr; } .owner-section-heading { align-items:flex-start; } .owner-section-heading h2 { font-size:21px; } .owner-assign-row { flex-direction:column; align-items:stretch; } .owner-content { padding:20px 15px; } .owner-mini-summary { gap:8px; } .owner-mini-summary>div { padding:12px; } }

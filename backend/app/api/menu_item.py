@@ -13,7 +13,8 @@ from app.services.menu_item_service import (
     create_menu_item,
     get_menu_items,
     get_menu_item_by_id,
-    update_menu_item
+    update_menu_item,
+    get_owner_menu_items
 )
 from app.core.dependencies import get_current_user, require_roles
 
@@ -75,6 +76,31 @@ def list_menu_items(
         restaurant_id=restaurant_id
     )
 
+# ==================== GET ALL MENU ITEMS FOR RESTAURANT OWNER ====================
+# Backend: GET /api/v1/restaurants/{restaurant_id}/menu/owner
+@router.get(
+    "/owner",
+    response_model=list[MenuItemResponse]
+)
+def list_owner_menu_items(
+    restaurant_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_roles("RESTAURANT_OWNER"))
+):
+    # Retrieve all dishes, including unavailable ones, for this owner.
+    menu_items = get_owner_menu_items(
+        db=db,
+        restaurant_id=restaurant_id,
+        owner_id=current_user.id
+    )
+
+    if menu_items is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Restaurant not found or you do not own this restaurant"
+        )
+
+    return menu_items
 
 @router.get(
     "/{menu_item_id}",

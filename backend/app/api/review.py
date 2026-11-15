@@ -114,3 +114,26 @@ def get_restaurant_reviews(
     ).all()
 
     return reviews
+
+
+# ==================== GET REVIEWS WRITTEN BY CURRENT CUSTOMER ====================
+# Backend: GET /api/v1/reviews/my
+@router.get(
+    "/my",
+    response_model=list[ReviewResponse]
+)
+def get_my_reviews(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_roles("CUSTOMER"))
+):
+    # Find reviews linked to orders placed by the logged-in customer.
+    reviews = db.query(Review).join(
+        Order,
+        Review.order_id == Order.id
+    ).filter(
+        Order.customer_id == current_user.id
+    ).order_by(
+        Review.created_at.desc()
+    ).all()
+
+    return reviews

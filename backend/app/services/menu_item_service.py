@@ -46,6 +46,31 @@ def get_menu_items(
     ).all()
 
 
+# ==================== GET ALL MENU ITEMS FOR RESTAURANT OWNER ====================
+# Includes available and unavailable dishes.
+def get_owner_menu_items(
+    db: Session,
+    restaurant_id: int,
+    owner_id: int
+) -> list[MenuItem] | None:
+
+    # Verify that this restaurant belongs to the logged-in owner.
+    restaurant = db.query(Restaurant).filter(
+        Restaurant.id == restaurant_id,
+        Restaurant.owner_id == owner_id
+    ).first()
+
+    if restaurant is None:
+        return None
+
+    # Return every menu item, regardless of availability.
+    return db.query(MenuItem).filter(
+        MenuItem.restaurant_id == restaurant_id
+    ).order_by(
+        MenuItem.id.desc()
+    ).all()
+
+
 def get_menu_item_by_id(
     db: Session,
     menu_item_id: int,

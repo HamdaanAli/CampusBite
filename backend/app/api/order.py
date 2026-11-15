@@ -1,4 +1,3 @@
-
 from datetime import date, datetime, time, timedelta, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
@@ -29,6 +28,24 @@ router = APIRouter(
     prefix="/orders",
     tags=["Orders"]
 )
+
+# ==================== LIST ACTIVE DELIVERY PARTNERS FOR OWNER ASSIGNMENT ====================
+# Backend: GET /api/v1/orders/delivery-partners
+@router.get("/delivery-partners")
+def list_active_delivery_partners(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_roles("RESTAURANT_OWNER"))
+):
+    partners = db.query(User).filter(
+        User.role == "DELIVERY_PARTNER",
+        User.is_active == True
+    ).order_by(User.full_name.asc()).all()
+
+    return [
+        {"id": partner.id, "full_name": partner.full_name}
+        for partner in partners
+    ]
+
 
 
 @router.post(

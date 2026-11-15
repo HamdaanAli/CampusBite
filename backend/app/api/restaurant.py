@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models.user import User
+from app.models.restaurant import Restaurant
 from app.schemas.restaurant import RestaurantCreate, RestaurantUpdate, RestaurantResponse
 from app.services.restaurant_service import (create_restaurant, get_restaurants,
 get_restaurant_by_id,update_restaurant)
@@ -51,6 +52,28 @@ def list_restaurants(
     current_user: User = Depends(get_current_user)
 ):
     return get_restaurants(db)
+
+# ==================== GET RESTAURANTS OWNED BY CURRENT OWNER ====================
+# Backend: GET /api/v1/restaurants/my
+# Returns all restaurants belonging to the logged-in restaurant owner.
+# Includes inactive restaurants so the owner can manage them.
+@router.get(
+    "/my",
+    response_model=list[RestaurantResponse]
+)
+def get_my_restaurants(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_roles("RESTAURANT_OWNER"))
+):
+    # Retrieve only restaurants owned by the authenticated user.
+    restaurants = db.query(Restaurant).filter(
+        Restaurant.owner_id == current_user.id
+    ).order_by(
+        Restaurant.id.desc()
+    ).all()
+
+    return restaurants
+
 
 #register a route to get a specific restaurant by its ID, only if it is active
 @router.get(
