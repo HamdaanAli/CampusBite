@@ -47,9 +47,13 @@ def create_new_restaurant(
 )
 
 #register a route to list all active restaurants for all roles, including customers and restaurant owners
+
+@router.get(
+    "/",
+    response_model=list[RestaurantResponse]
+)
 def list_restaurants(
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    db: Session = Depends(get_db)
 ):
     return get_restaurants(db)
 
