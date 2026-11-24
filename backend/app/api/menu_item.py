@@ -16,7 +16,8 @@ from app.services.menu_item_service import (
     update_menu_item,
     get_owner_menu_items
 )
-from app.core.dependencies import get_current_user, require_roles
+from app.core.dependencies import  get_current_user, require_roles
+from app.services.restaurant_service import get_restaurant_by_id
 
 
 router = APIRouter(
@@ -61,20 +62,31 @@ def create_new_menu_item(
             detail="Could not create menu item"
         )
 
-
+# Public route: view available dishes at an active restaurant.
 @router.get(
     "/",
     response_model=list[MenuItemResponse]
 )
 def list_menu_items(
     restaurant_id: int,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    db: Session = Depends(get_db)
 ):
+    restaurant = get_restaurant_by_id(
+        db=db,
+        restaurant_id=restaurant_id
+    )
+
+    if restaurant is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Restaurant not found"
+        )
+
     return get_menu_items(
         db=db,
         restaurant_id=restaurant_id
     )
+
 
 # ==================== GET ALL MENU ITEMS FOR RESTAURANT OWNER ====================
 # Backend: GET /api/v1/restaurants/{restaurant_id}/menu/owner

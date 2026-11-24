@@ -7,7 +7,7 @@ from app.models.restaurant import Restaurant
 from app.schemas.restaurant import RestaurantCreate, RestaurantUpdate, RestaurantResponse
 from app.services.restaurant_service import (create_restaurant, get_restaurants,
 get_restaurant_by_id,update_restaurant)
-from app.core.dependencies import get_current_user, require_roles
+from app.core.dependencies import require_roles
 
 
 router = APIRouter(
@@ -41,10 +41,7 @@ def create_new_restaurant(
             detail="Could not create restaurant"
         )
 
-@router.get(
-    "/",
-    response_model=list[RestaurantResponse]
-)
+
 
 #register a route to list all active restaurants for all roles, including customers and restaurant owners
 
@@ -86,8 +83,8 @@ def get_my_restaurants(
 )
 def get_restaurant(
     restaurant_id: int,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    db: Session = Depends(get_db)
+    
 ):
     restaurant = get_restaurant_by_id(
         db=db,

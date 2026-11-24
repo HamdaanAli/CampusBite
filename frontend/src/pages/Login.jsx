@@ -39,8 +39,8 @@ function Login() {
       RESTAURANT_OWNER: '/owner',
       DELIVERY_PARTNER: '/delivery',
     };
-
-    navigate(dashboardPaths[user.role] || '/', { replace: true });
+    
+  navigate(dashboardPaths[user.role] || '/', { replace: true });
     } catch (err) {
       setError(
         err.response?.data?.error?.message ||
